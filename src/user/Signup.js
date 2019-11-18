@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import Layout from '../core/Layout'
-import {API} from '../config';
+import {signup} from '../auth/index';
 import {Link} from 'react-router-dom';
 
 const Signup = () => {
@@ -47,22 +47,6 @@ const Signup = () => {
             <button onClick={clickSubmit} className="btn btn-primary">Submit</button>
         </form>
     )
-
-    const signup = user => {
-        // console.log(name," ", email, " ", password);
-        return fetch(`${API}/signup`, {
-            method: "POST",
-            headers: {
-                Accept: 'application/json',
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(user)
-        }).then(response => {
-            return response.json()
-        }).catch(err => {
-            console.log(err)
-        })
-    }
 
     const clickSubmit = (event) => {
         event.preventDefault();
