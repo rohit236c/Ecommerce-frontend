@@ -1,9 +1,105 @@
-import React from 'react'
-import Layout from '../core/Layout'
+import React, {useState} from 'react';
+import Layout from '../core/Layout';
+import {Link, Redirect} from 'react-router-dom'
+import {signin} from '../auth/index';
+
 const Signin = () => {
+    const [values,
+        setValues] = useState({email: '', password: '', error: '', loading: false, redirectToReferrer: false});
+
+    const handleChange = key => event => {
+        setValues({
+            ...values,
+            error: false,
+            [key]: event.target.value
+        });
+    }
+
+    const {email, password, loading, redirectToReferrer, error} = values;
+
+    const signInForm = () => (
+
+        <form>
+            <div className="d-flex justify-content-end">
+                <Link to="/signup">Signup here</Link>
+            </div>
+            <div className="form-group">
+                <label className="text-muted">Email</label>
+                <input
+                    onChange={handleChange('email')}
+                    className="form-control"
+                    value={email}
+                    type="email"/>
+            </div>
+            <div className="form-group">
+                <label className="text-muted">Password</label>
+                <input
+                    onChange={handleChange('password')}
+                    className="form-control"
+                    value={password}
+                    type="password"/>
+            </div>
+            <button onClick={clickSubmit} className="btn btn-primary">Submit</button>
+
+        </form>
+    )
+
+    const clickSubmit = (event) => {
+        event.preventDefault();
+        setValues({
+            ...values,
+            error: false,
+            loading: true
+        });
+        signin({email, password}).then(data => {
+            console.log(data," data");
+            if (data.message) {
+                setValues({
+                    ...values,
+                    error: data.message,
+                    loading: false
+                });
+            } else {
+                setValues({
+                    ...values,
+                    redirectToReferrer: true
+                });
+            }
+        })
+    }
+
+    const showErrors = () => (
+        <div
+            className="alert alert-danger"
+            style={{
+            display: error
+                ? ''
+                : 'none'
+        }}>
+            {error}
+        </div>
+    )
+    const showLoading = () => (loading && (
+        <div className="alert alert-info">
+            <h2>Loading...</h2>
+        </div>
+    ));
+
+    const redirectUser = () => {
+        if (redirectToReferrer) {
+            return <Redirect to="/"/>
+        }
+    }
+
     return (
-        <Layout title="Sign IN" description="Node Ecommerce Sign In ">
-            ...
+        <Layout
+            title="Sign In"
+            description="Sign In to Ecommerce Node.js"
+            className="container col-md-8 offset-md-2">
+            {showLoading()}
+            {showErrors()}
+            {signInForm()}
+            {redirectUser()}
         </Layout>
     )
 }
