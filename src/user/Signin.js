@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import Layout from '../core/Layout';
 import {Link, Redirect} from 'react-router-dom'
-import {signin} from '../auth/index';
+import {signin, authenticate} from '../auth/index';
 
 const Signin = () => {
     const [values,
-        setValues] = useState({email: '', password: '', error: '', loading: false, redirectToReferrer: false});
+        setValues] = useState({email: 'rohit236c@gmail.com', password: '7042124762', error: '', loading: false, redirectToReferrer: false});
 
     const handleChange = key => event => {
         setValues({
@@ -37,7 +37,7 @@ const Signin = () => {
                     onChange={handleChange('password')}
                     className="form-control"
                     value={password}
-                    type="password"/>
+                    type="text"/>
             </div>
             <button onClick={clickSubmit} className="btn btn-primary">Submit</button>
 
@@ -52,7 +52,6 @@ const Signin = () => {
             loading: true
         });
         signin({email, password}).then(data => {
-            console.log(data," data");
             if (data.message) {
                 setValues({
                     ...values,
@@ -60,9 +59,11 @@ const Signin = () => {
                     loading: false
                 });
             } else {
-                setValues({
-                    ...values,
-                    redirectToReferrer: true
+                authenticate(data, () => {
+                    setValues({
+                        ...values,
+                        redirectToReferrer: true
+                    });
                 });
             }
         })
