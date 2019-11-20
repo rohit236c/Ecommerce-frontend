@@ -65,8 +65,9 @@ const AddProduct = () => {
         formData.set(name, value);
         setValues({
             ...values,
+            error:'',
             [name]: value
-        })
+        });
     };
     const {user, token} = isAuthenticated();
     const clickSubmit = (e) => {
@@ -76,12 +77,15 @@ const AddProduct = () => {
             error: '',
             loading: true
         });
+        console.log("form-2", formData);
         createProduct(user._id, token, formData).then(data => {
-            if (data.error) {
+            console.log(data," daat ");
+            if (data.err) {
                 setValues({
                     ...values,
-                    error: data.error,
-                    loading: false
+                    error: data.err,
+                    loading: false,
+                    createdProduct:''
                 });
             } else {
                 setValues({
@@ -91,13 +95,47 @@ const AddProduct = () => {
                     quantity: '',
                     price: '',
                     photo: '',
-                    error: '',
-                    createdProduct: data.name,
+                    category:'',
+                    error: false,
+                    formData: new FormData(),
+                    createdProduct: data.product.name,
                     loading: false
                 });
+                console.log(formData,"form");
             }
         });
     };
+    const showError = () => {
+        return (
+            <div
+                className="alert alert-danger"
+                style={{
+                display: error
+                    ? ''
+                    : 'none'
+            }}>{error}</div>
+        );
+    };
+    const showSucess = () => {
+        return (
+            <div
+                className="alert alert-info"
+                style={{
+                display: createdProduct
+                    ? ''
+                    : 'none'
+            }}>
+                <h2>
+                    {`${createdProduct} is created!!`}
+                </h2>
+            </div>
+        );
+    };
+    const showLoading = () => ((loading && (
+        <div className="alert alert-success">
+            <h2>Loading...</h2>
+        </div>
+    )));
     const newProductAddForm = () => {
         return (
             <form className="mb-3" onSubmit={clickSubmit}>
@@ -138,7 +176,7 @@ const AddProduct = () => {
                 <div className="form-group">
                     <label className="text-muted">Category</label>
                     <select onChange={handleChange('category')} className="form-control">
-                        {/* <option>Please select any one category</option> */}
+                        <option>Please select any one category</option>
                         {categories && categories.map((c, i) => (
                             <option key={i} value={c._id}>{c.name}</option>
                         ))}
@@ -173,6 +211,9 @@ const AddProduct = () => {
             description={`Hello, ${user.name}!Want to add new product`}>
             <div className="row">
                 <div className="col-md-8 offset-md-2">
+                    {showError()}
+                    {showLoading()}
+                    {showSucess()}
                     {newProductAddForm()}
                 </div>
             </div>
