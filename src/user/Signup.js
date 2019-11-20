@@ -93,7 +93,7 @@ const Signup = () => {
                 ? ''
                 : 'none'
         }}>
-            New Account is created. Please <Link to="/signin">Sign in</Link> 
+            New Account is created. Please <Link to="/signin">Sign in</Link>
         </div>
     )
 
