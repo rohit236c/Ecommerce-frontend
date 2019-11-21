@@ -1,5 +1,7 @@
 import React from 'react';
 import Menu from './Menu';
+import "../styles.css";
+
 const Layout = ({
     title = "Title",
     description = "Description",
@@ -20,4 +22,4 @@ const Layout = ({
     )
 }
 
-export default Layout
+export default Layout;

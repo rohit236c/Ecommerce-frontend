@@ -1,0 +1,22 @@
+import React from 'react';
+import {Link} from 'react-router-dom';
+import {API} from '../config';
+import '../styles.css';
+
+const ShowImage = ({item, url}) => {
+
+    return (
+        <div className="product-img">
+            <img
+                src={`${API}/${url}/photo/${item._id}`}
+                alt={item.name}
+                className="mb-3"
+                style={{
+                maxHeight: '100%',
+                maxWidth: "100%"
+            }}/>
+        </div>
+    )
+}
+
+export default ShowImage
