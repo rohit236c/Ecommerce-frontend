@@ -77,7 +77,6 @@ const AddProduct = () => {
             error: '',
             loading: true
         });
-        console.log("form-2", formData);
         createProduct(user._id, token, formData).then(data => {
             console.log(data," daat ");
             if (data.err) {
