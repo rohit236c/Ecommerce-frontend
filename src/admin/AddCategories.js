@@ -31,7 +31,7 @@ const AddCategories = () => {
                 setSuccess(true);
             }
         });
-    }
+    };
     const showSuccess = () => {
         if (success) {
             return <h3 className="text-success">{name} category is created
@@ -63,7 +63,7 @@ const AddCategories = () => {
             </div>
             <button className="btn btn-outline-primary">Create Category</button>
         </form>
-    )
+    );
     return (
         <Layout title="Add Category" description={`Hello, ${user.name}!`}>
             <div className="row">

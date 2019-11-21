@@ -16,7 +16,7 @@ const ShowImage = ({item, url}) => {
                 maxWidth: "100%"
             }}/>
         </div>
-    )
-}
+    );
+};
 
 export default ShowImage

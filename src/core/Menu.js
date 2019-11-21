@@ -63,7 +63,7 @@ const Menu = (props) => {
                 )}
             </ul>
         </div>
-    )
-}
+    );
+};
 
 export default withRouter(Menu);

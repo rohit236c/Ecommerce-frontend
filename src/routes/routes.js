@@ -24,7 +24,7 @@ const Routes = () => {
                 <AdminRoutes path="/create/product" exact component={AddProducts}></AdminRoutes>
             </Switch>
         </BrowserRouter>
-    )
-}
+    );
+};
 
 export default Routes

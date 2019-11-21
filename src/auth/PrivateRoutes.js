@@ -18,7 +18,7 @@ const PrivateRoutes = ({
                     from: props.location
                 }
             }}/>)}/>
-    )
-}
+    );
+};
 
 export default PrivateRoutes

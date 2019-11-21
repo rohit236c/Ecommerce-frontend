@@ -202,8 +202,8 @@ const AddProduct = () => {
                 </div>
                 <button className="btn btn-outline-primary">Create Product</button>
             </form>
-        )
-    }
+        );
+    };
     return (
         <Layout
             title="Add a new product"
