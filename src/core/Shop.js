@@ -5,10 +5,18 @@ import Checkbox from './Checkbox';
 
 const Shop = () => {
 
+    const [Filters,
+        setFilters] = useState({
+        filters: {
+            categories: [],
+            price: []
+        }
+    });
     const [categories,
         setCategories] = useState([]);
     const [error,
         setError] = useState(false);
+
     const init = () => {
         getCategories().then(data => {
             if (data.error) {
@@ -17,6 +25,15 @@ const Shop = () => {
                 setCategories(data.categories);
             }
         });
+    };
+
+    const handleFilters = (filters, filterBy) => {
+        // console.log(filterBy, " ", filters);
+        const newFilters = {
+            ...Filters
+        };
+        newFilters.filters[filterBy] = filters;
+        setFilters(newFilters);
     };
 
     useEffect(() => {
@@ -32,11 +49,13 @@ const Shop = () => {
                 <div className="col-4">
                     <h4>Filter By Category</h4>
                     <ul>
-                        <Checkbox categories={categories}/>
+                        <Checkbox
+                            categories={categories}
+                            handleFilters={filters => handleFilters(filters, 'categories')}/>
                     </ul>
                 </div>
                 <div className="col-8">
-                    right
+                   {JSON.stringify(Filters)}
                 </div>
             </div>
         </Layout>
