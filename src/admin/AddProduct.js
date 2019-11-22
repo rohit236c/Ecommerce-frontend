@@ -56,7 +56,7 @@ const AddProduct = () => {
     useEffect(() => {
         // setValues({     ...values,     formData: new FormData() });
         init();
-    }, []);
+    },[]);
     const handleChange = name => (e) => {
         const value = name === 'photo'
             ? e.target.files[0]
@@ -65,7 +65,7 @@ const AddProduct = () => {
         formData.set(name, value);
         setValues({
             ...values,
-            error:'',
+            error: '',
             [name]: value
         });
     };
@@ -78,13 +78,13 @@ const AddProduct = () => {
             loading: true
         });
         createProduct(user._id, token, formData).then(data => {
-            console.log(data," daat ");
+            console.log(data, " daat ");
             if (data.err) {
                 setValues({
                     ...values,
                     error: data.err,
                     loading: false,
-                    createdProduct:''
+                    createdProduct: ''
                 });
             } else {
                 setValues({
@@ -94,13 +94,13 @@ const AddProduct = () => {
                     quantity: '',
                     price: '',
                     photo: '',
-                    category:'',
+                    category: '',
                     error: false,
                     formData: new FormData(),
                     createdProduct: data.product.name,
                     loading: false
                 });
-                console.log(formData,"form");
+                console.log(formData, "form");
             }
         });
     };
