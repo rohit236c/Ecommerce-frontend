@@ -3,6 +3,7 @@ import Layout from './Layout';
 import {getCategories} from '../admin/apiAdmin';
 import {getFilteredProducts} from './coreApi';
 import Checkbox from './Checkbox';
+import Card from './Card';
 import {prices} from './fixedPrices';
 import Radiobox from './Radiobox';
 
@@ -41,7 +42,7 @@ const Shop = () => {
             if (data.error) {
                 setError(data.error);
             } else {
-                setFilteredResults(data);
+                setFilteredResults(data.data);
             }
         }).catch(err => {
             setError("server is down!!");
@@ -73,6 +74,7 @@ const Shop = () => {
     };
     useEffect(() => {
         init();
+        loadFilteredResults(skip, limit, Filters.filters);
     }, []);
 
     return (
@@ -96,7 +98,10 @@ const Shop = () => {
                     </div>
                 </div>
                 <div className="col-8">
-                    {JSON.stringify(filteredResults)}
+                    <h2 className="mb-4">Products</h2>
+                    <div className="row">
+                        {filteredResults.map((p, i) => (<Card key={i} product={p}/>))}
+                    </div>
                 </div>
             </div>
         </Layout>
