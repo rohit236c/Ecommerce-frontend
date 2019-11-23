@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import Layout from './Layout';
 import {getProducts} from '../core/coreApi';
 import Card from './Card';
+import Search from './Search';
 
 const Home = () => {
 
@@ -68,6 +69,7 @@ const Home = () => {
             title="Home Page"
             description="Node Ecommerce"
             className="container-fluid">
+                <Search/>
             {showLoading()}
             {showError()}
             {!loading && !error && (
