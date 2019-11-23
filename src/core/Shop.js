@@ -24,6 +24,8 @@ const Shop = () => {
         setLimit] = useState(6);
     const [skip,
         setSkip] = useState(0);
+    const [size,
+        setSize] = useState(0);
     const [filteredResults,
         setFilteredResults] = useState([]);
 
@@ -43,10 +45,35 @@ const Shop = () => {
                 setError(data.error);
             } else {
                 setFilteredResults(data.data);
+                setSize(data.size);
+                setSkip(0);
             }
         }).catch(err => {
             setError("server is down!!");
         });
+    };
+    const loadMoreProducts = () => {
+        let toSkip = skip + limit;
+        getFilteredProducts(toSkip, limit, Filters.filters).then(data => {
+            if (data.error) {
+                setError(data.error);
+            } else {
+                setFilteredResults([
+                    ...filteredResults,
+                    ...data.data
+                ]);
+                setSize(data.data.size);
+                setSkip(0);
+            }
+        }).catch(err => {
+            setError("server is down!!");
+        });
+    };
+
+    const loadMoreButton = () => {
+        return (size > 0 && size >= limit && (
+            <button onClick={loadMoreProducts} className="btn btn-warning mb-5">Load more</button>
+        ));
     };
 
     const handleFilters = (filters, filterBy) => {
@@ -102,6 +129,7 @@ const Shop = () => {
                     <div className="row">
                         {filteredResults.map((p, i) => (<Card key={i} product={p}/>))}
                     </div>
+                   {loadMoreButton()}
                 </div>
             </div>
         </Layout>

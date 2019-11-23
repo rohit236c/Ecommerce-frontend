@@ -78,7 +78,6 @@ const AddProduct = () => {
             loading: true
         });
         createProduct(user._id, token, formData).then(data => {
-            console.log(data, " daat ");
             if (data.err) {
                 setValues({
                     ...values,
@@ -93,14 +92,12 @@ const AddProduct = () => {
                     description: '',
                     quantity: '',
                     price: '',
-                    photo: '',
-                    category: '',
+                    category:'',
+                    shipping:'',
                     error: false,
-                    formData: new FormData(),
                     createdProduct: data.product.name,
                     loading: false
                 });
-                console.log(formData, "form");
             }
         });
     };
@@ -179,8 +176,6 @@ const AddProduct = () => {
                         {categories && categories.map((c, i) => (
                             <option key={i} value={c._id}>{c.name}</option>
                         ))}
-                        <option value="5dd4e4814892d246b0401687">phone</option>
-                        <option value="5dd4e4814892d246b0401687">adding</option>
                     </select>
 
                 </div>

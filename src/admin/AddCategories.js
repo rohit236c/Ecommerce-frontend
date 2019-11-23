@@ -8,6 +8,8 @@ const AddCategories = () => {
 
     const [name,
         setName] = useState('');
+        const [printName,
+            setPrintName] = useState('');
     const [error,
         setError] = useState(false);
     const [success,
@@ -27,6 +29,8 @@ const AddCategories = () => {
             if (data.error) {
                 setError(data.error);
             } else {
+                setPrintName(name);
+                setName('');
                 setError('');
                 setSuccess(true);
             }
@@ -34,7 +38,7 @@ const AddCategories = () => {
     };
     const showSuccess = () => {
         if (success) {
-            return <h3 className="text-success">{name} category is created
+            return <h3 className="text-success">{printName} category is created
             </h3>
         }
     };
