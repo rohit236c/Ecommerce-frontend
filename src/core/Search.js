@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {getCategories} from '../admin/apiAdmin';
+import {list} from './coreApi';
 import Card from './Card';
 
 const Search = () => {
 
     const [data,
-        setData] = useState({categories: [], category: '', search: '', results: '', searched: ''});
+        setData] = useState({categories: [], category: '', search: '', results: [], searched: ''});
 
     const {categories, category, search, results, searched} = data;
 
@@ -27,16 +28,40 @@ const Search = () => {
         loadCategories();
     }, []);
 
-    const searchSubmit = () => {
-        //
+    const searchSubmit = (e) => {
+        e.preventDefault();
+        searchData()
+    };
+
+    const searchData = () => {
+        if (search) {
+            list({
+                search: search || undefined,
+                category: category
+            }).then((response) => {
+                if (response.error) {
+                    console.log(response.error);
+                }
+                setData({
+                    ...data,
+                    results: response,
+                    searched: true
+                });
+            }).catch(err => console.log(err));
+        }
     };
     const handleSubmit = () => {
         //
     };
-    const handleChange = () => {
+    const handleChange = name => (event) => {
         //
-    };
+        setData({
+            ...data,
+            [name]: event.target.value,
+            searched: false
+        });
 
+    };
     const searchForm = () => (
         <form onSubmit={searchSubmit}>
             <span className="input-group-text">
@@ -65,11 +90,37 @@ const Search = () => {
             </span>
         </form>
     );
+    const searchMessage = (searched, results) => {
+        if(searched && results.length > 0) {
+            return `Found ${results.length} products!!`
+        }
+        if(searched && results.length < 1) {
+            return `No Products found!`
+        }
+    };
+    const searchedProducts = (results = []) => (
+        <div>
+            <h2 className="mt-4 mb-4">
+                {searchMessage(searched, results)}
+            </h2>
+            <div className="row">
+                {results.map((r, i) => (< Card key = {
+                    i
+                }
+                product = {
+                    r
+                } />))}
+            </div>
+        </div>
+    );
 
     return (
         <div className="row">
             <div className="container mb-3">
                 {searchForm()}
+            </div>
+            <div className="container-fluid">
+                {searchedProducts(results)}
             </div>
         </div>
 
