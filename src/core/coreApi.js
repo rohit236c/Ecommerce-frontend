@@ -27,7 +27,7 @@ export const getFilteredProducts = (skip, limit, filters = {}) => {
     }).then(response => {
         return response.json();
     }).catch(err => {
-       return err;
+        return err;
     });
 };
 
@@ -42,6 +42,14 @@ export const list = params => {
 
 export const getOneProduct = (productId) => {
     return fetch(`${API}/product/${productId}`, {method: "GET"}).then(response => {
+        return response.json();
+    }).catch(err => {
+        return reject({err});
+    });
+};
+
+export const getRelatedProducts = (productId) => {
+    return fetch(`${API}/products/related/${productId}`, {method: "GET"}).then(response => {
         return response.json();
     }).catch(err => {
         return reject({err});

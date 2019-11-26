@@ -127,9 +127,13 @@ const Shop = () => {
                 <div className="col-8">
                     <h2 className="mb-4">Products</h2>
                     <div className="row">
-                        {filteredResults.map((p, i) => (<Card key={i} product={p}/>))}
+                        {filteredResults.map((p, i) => (
+                            <div key={i} className="col-4 mb-3">
+                                <Card product={p}/>
+                            </div>
+                        ))}
                     </div>
-                   {loadMoreButton()}
+                    {loadMoreButton()}
                 </div>
             </div>
         </Layout>
