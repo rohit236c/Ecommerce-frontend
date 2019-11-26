@@ -30,7 +30,7 @@ const Search = () => {
 
     const searchSubmit = (e) => {
         e.preventDefault();
-        searchData()
+        searchData();
     };
 
     const searchData = () => {
@@ -50,11 +50,7 @@ const Search = () => {
             }).catch(err => console.log(err));
         }
     };
-    const handleSubmit = () => {
-        //
-    };
     const handleChange = name => (event) => {
-        //
         setData({
             ...data,
             [name]: event.target.value,

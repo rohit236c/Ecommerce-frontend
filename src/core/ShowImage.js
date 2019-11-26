@@ -12,7 +12,7 @@ const ShowImage = ({item, url}) => {
                 className="mb-3"
                 style={{
                 maxHeight: '100%',
-                maxWidth: "100%"
+                maxWidth: '100%'
             }}/>
         </div>
     );

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react';
 import Layout from './Layout';
 import {getProducts} from '../core/coreApi';
 import Card from './Card';
