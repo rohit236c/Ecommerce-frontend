@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {getBrainTreeClientToken} from './coreApi';
+import {getBrainTreeClientToken, processPayment} from './coreApi';
 import {Link} from 'react-router-dom'
 import {isAuthenticated} from '../auth';
 import DropIn from 'braintree-web-drop-in-react';
@@ -17,19 +17,21 @@ const CheckOut = ({products}) => {
     const {user, token} = isAuthenticated();
 
     const getToken = (user, token) => {
-        getBrainTreeClientToken(user._id, token).then((data) => {
-            if (data.error) {
-                setData({
-                    ...data,
-                    error: data.error
-                });
-            } else {
-                setData({
-                    ...data,
-                    clientToken: data.clientToken
-                });
-            }
-        })
+        if(user) {
+            getBrainTreeClientToken(user._id, token).then((data) => {
+                if (data.error) {
+                    setData({
+                        ...data,
+                        error: data.error
+                    });
+                } else {
+                    setData({
+                        clientToken: data.clientToken
+                    });
+                }
+            })
+        }
+        
     };
     useEffect(() => {
         getToken(user, token);
@@ -37,27 +39,38 @@ const CheckOut = ({products}) => {
 
     const buyProducts = () => {
         let nonce;
-
         let getNonce = data
             .instance
             .requestPaymentMethod()
-            .then(data => {
-                console.log(data);
-                nonce = data.nonce;
+            .then(response => {
+                nonce = response.nonce;
                 // send nonce as card as to backend to as 'paymentMethodNonce' and also charge
                 // total to be charged
-                console.log("noncee", nonce, getTotal());
+                const paymentData = {
+                    paymentMethodNonce: nonce,
+                    amount: getTotal(products)
+                };
+                processPayment(user._id, token, paymentData).then((response) => {
+                    setData({
+                        ...data,
+                        success: response.success
+                    });
+                }).catch((err) => {
+                    setData({
+                        ...data,
+                        error: err.message
+                    });
+                });
             })
             .catch(err => {
-                console.log(err);
                 setData({
                     ...data,
                     error: err.message
                 });
-            })
+            });
     };
-    const showDropIn = () => (
-        <div onBlur= {()=>{setData({...data, error: ""})}}>
+    const showDropIn = (success) => (
+        <div onBlur= {()=>{setData({...data, error: ""})}} style={{display: success? 'none':''}}>
             {data.clientToken && products.length > 0
                 ? (
                     <div>
@@ -67,7 +80,7 @@ const CheckOut = ({products}) => {
                         }}
                             onInstance
                             ={instance => data.instance = instance}/>
-                        <button onClick={buyProducts} className="btn btn-primary">Make Payment</button>
+                        <button onClick={buyProducts} className="btn btn-primary btn-block">Make Payment</button>
                     </div>
                 )
                 : <Link to="/shop">
@@ -89,11 +102,24 @@ const CheckOut = ({products}) => {
             );
         }
     };
+    const showSuccess = (success) => {
+        if (success) {
+            return (
+                <div
+                    className="alert alert-info"
+                    style={{
+                    display: success
+                        ? ''
+                        : 'none'
+                }}>"Thanks!! Your Payment was SuccessFul!!"</div>
+            );
+        }
+    };
 
-    const showCheckout = () => {
+    const showCheckout = (success) => {
         return isAuthenticated()
             ? (
-                <div>{showDropIn()}</div>
+                <div>{showDropIn(success)}</div>
             )
             : (
                 <Link to="/signin">
@@ -105,7 +131,8 @@ const CheckOut = ({products}) => {
         <div>
             <h2>Total : Rs {getTotal()}</h2>
             {showError(data.error)}
-            {showCheckout()}
+            {showCheckout(data.success)}
+            {showSuccess(data.success)}
         </div>
     );
 };
