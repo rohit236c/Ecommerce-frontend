@@ -24,9 +24,8 @@ const Cart = () => {
                 showAddToCart={false}
                 cartUpdate={true}
                 deleteFromCart={true}
-                run = {run}
-                setRun={setRun}
-                />))}
+                run={run}
+                setRun={setRun}/>))}
         </div>
     );
 
@@ -51,7 +50,7 @@ const Cart = () => {
                 <div className="col-6">
                     <h2 className="mb-4">Your Cart Summary</h2>
                     <hr/>
-                    <CheckOut products={items}/>
+                    <CheckOut products={items} setRun={setRun} run={run}/>
                 </div>
             </div>
         </Layout>

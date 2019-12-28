@@ -58,10 +58,17 @@ export const deleteItem = (productId) => {
         }
         cart.map((product, id) => {
             if (product._id === productId) {
-                cart.splice(id,1);
+                cart.splice(id, 1);
             }
         });
         localStorage.setItem('cart', JSON.stringify(cart));
     }
     return cart;
+};
+
+export const emptyCart = next => {
+    if (typeof window !== undefined) {
+        localStorage.removeItem('cart');
+        next();
+    }
 };
