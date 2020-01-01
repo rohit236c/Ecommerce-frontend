@@ -36,6 +36,19 @@ export const getCategories = () => {
     return fetch(`${API}/categories`, {method: "GET"}).then(response => {
         return response.json();
     }).catch(err => {
-       return err;
+        return err;
+    });
+};
+export const listOrders = (userId, token) => {
+    return fetch(`${API}/orders/list/${userId}`, {
+        method: "GET",
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    }).then(response => {
+        return response.json();
+    }).catch(err => {
+        return err;
     });
 };
