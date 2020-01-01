@@ -46,7 +46,7 @@ const CheckOut = ({
     useEffect(() => {
         getToken(user, token);
     }, []);
-
+    let deliveryAddress = data.address;
     const buyProducts = () => {
         setData({
             ...data,
@@ -69,22 +69,23 @@ const CheckOut = ({
                     let createOrderData = {
                         products: products,
                         transaction_id: response.transaction_id,
-                        amount: response.transaction.amount
+                        amount: response.transaction.amount,
+                        address: deliveryAddress
                     };
-                    createOrder(user._id, token, createOrderData)
-                        .then()
-                        .catch();
+                    createOrder(user._id, token, createOrderData).then((response) => {
+                        emptyCart(() => {
+                            setRun(!run); // run useEffect in parent Cart
+                            setData({loading: false, success: true});
+                        });
+                    }).catch((err) => {
+                        setData({loading: false});
+                    });
 
                     setData({
                         ...data,
                         success: response.success
                     });
-                    emptyCart(() => {
-                        setRun(!run); // run useEffect in parent Cart
-                        console.log("Payment Successful!!!");
-                        setData({loading: false});
 
-                    });
                 }).catch((err) => {
                     setData({
                         ...data,
@@ -119,12 +120,12 @@ const CheckOut = ({
                                 value={data.address}
                                 placeholder="Type your delivery address here..."/>
                         </div>
-                            <DropIn
-                                options={{
-                                authorization: data.clientToken
-                            }}
-                                onInstance
-                                ={instance => data.instance = instance}/>
+                        <DropIn
+                            options={{
+                            authorization: data.clientToken
+                        }}
+                            onInstance
+                            ={instance => data.instance = instance}/>
 
                         <button onClick={buyProducts} className="btn btn-primary btn-block">Make Payment</button>
                     </div>

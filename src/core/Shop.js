@@ -34,6 +34,7 @@ const Shop = () => {
             if (data.error) {
                 setError(data.error);
             } else {
+                if(data.categories)
                 setCategories(data.categories);
             }
         });
@@ -127,7 +128,7 @@ const Shop = () => {
                 <div className="col-9">
                     <h2 className="mb-4">Products</h2>
                     <div className="row">
-                        {filteredResults.map((p, i) => (
+                        { filteredResults  && filteredResults.map((p, i) => (
                             <div key={i} className="col-4 mb-3">
                                 <Card product={p}/>
                             </div>

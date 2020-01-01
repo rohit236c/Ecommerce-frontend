@@ -17,7 +17,7 @@ const Checkbox = ({categories, handleFilters}) => {
         handleFilters(newCheckedCategoryId);
     };
 
-    return categories.map((c, i) => (
+    return categories && categories.map((c, i) => (
         <li key={i} className="list-unstyled">
             <input
                 value={checked.indexOf(c._id === -1)}
