@@ -2,30 +2,69 @@ import React, {useState, useEffect} from 'react';
 import Layout from '../core/Layout';
 import {isAuthenticated} from '../auth/index';
 import {Link} from 'react-router-dom';
-import {listOrders} from './apiAdmin';
+import {listOrders, getStatusValue, updateOrderStatus} from './apiAdmin';
 import moment from 'moment';
 
 const Orders = () => {
     const [orders,
         setOrder] = useState([]);
+    const [statusValue,
+        setStatusValue] = useState([]);
     const {user, token} = isAuthenticated();
     const loadOrders = () => {
         listOrders(user._id, token).then(data => {
             if (data.err) {
                 //err set
-
+                console.log(data.err);
             } else {
                 setOrder(data);
             }
         });
 
     };
+    const loadStatusValue = () => {
+        getStatusValue(user._id, token).then(data => {
+            if (data.err) {
+                //err set
+                console.log(data.err);
+            } else {
+                setStatusValue(data);
+            }
+        });
+    }
+    const handleStatusChange = (event, orderId) => {
+        updateOrderStatus(user._id, token, orderId, event.target.value).then((response) => {
+            if (response.error) {
+                console.log("Status field update failed");
+            } else {
+                loadOrders();
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+    const showStatus = (order) => {
+        return (
+            <div className="form-group">
+                <h3 className="mark mb-4">Status: {order.status}</h3>
+                <select
+                    className="form-control"
+                    onChange=
+                    {(e)=>handleStatusChange(e, order._id)}>
+                    <option>Update Status</option>
+                    {statusValue && statusValue.map((status, statusIdx) => (
+                        <option key={statusIdx} value={status}>{status}</option>
+                    ))}
+                </select>
+            </div>
+        );
+    }
     useEffect(() => {
         loadOrders();
+        loadStatusValue();
     }, []);
     const showOrdersLength = () => {
         if (orders && orders.length > 0) {
-            console.log(orders, "ord")
             return (
                 <h4 className="text-danger display-3">Total orders: {orders.length}</h4>
             );
@@ -42,7 +81,7 @@ const Orders = () => {
                     {key}
                 </div>
             </div>
-            <input type="text" value = {value} className="form-control" readOnly />
+            <input type="text" value={value} className="form-control" readOnly/>
         </div>
     );
 
@@ -65,7 +104,7 @@ const Orders = () => {
                                 </h2>
                                 <ul className="list-group mb-2">
                                     <li className="list-group-item">
-                                        Status: {order.status}
+                                        {showStatus(order)}
                                     </li>
                                     <li className="list-group-item">
                                         Transaction_id: {order.transaction_id}
