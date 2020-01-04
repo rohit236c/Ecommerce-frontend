@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom';
 const UserDashboard = () => {
     const {
         user: {
+            _id,
             name,
             email,
             role
@@ -20,7 +21,7 @@ const UserDashboard = () => {
                         <Link className="nav-link" to="/cart">My cart</Link>
                     </li>
                     <li className="list-group-item">
-                        <Link className="nav-link" to="/profile/update">Update Profile</Link>
+                        <Link className="nav-link" to={`/profile/${_id}`}>Update Profile</Link>
                     </li>
                 </ul>
             </div>

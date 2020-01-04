@@ -81,7 +81,7 @@ export const processPayment = (userId, token, paymentData) => {
         },
         body: JSON.stringify(paymentData)
     }).then(response => {
-        return response.json();
+        return response.json(); 
     }).catch(err => {
         return reject({err});
     });

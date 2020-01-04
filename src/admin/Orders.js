@@ -90,7 +90,8 @@ const Orders = () => {
             <div className="row">
                 <div className="col-md-8 offset-md-2">
                     {showOrdersLength()}
-                    {orders.map((order, orderIndex) => {
+                    {orders && orders.map((order, orderIndex) => {
+                        console.log(order , "order-1")
                         return (
                             <div
                                 className="mt-5"
