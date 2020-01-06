@@ -1,17 +1,36 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Layout from '../core/Layout';
 import {isAuthenticated} from '../auth/index';
 import {Link} from 'react-router-dom';
+import {getPurchaseHistory} from './apiUser';
+import moment from 'moment';
 
 const UserDashboard = () => {
+    const [history,
+        setHistory] = useState([]);
     const {
         user: {
             _id,
             name,
             email,
             role
-        }
+        },
+        token
     } = isAuthenticated();
+    const loadPurchaseHistory = () => {
+        getPurchaseHistory(_id, token).then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                setHistory(data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    };
+    useEffect(() => {
+        loadPurchaseHistory();
+    }, []);
     const userLinks = () => {
         return (
             <div className="card">
@@ -43,26 +62,49 @@ const UserDashboard = () => {
         );
     };
 
-    const purchaseHistory = () => {
+    const purchaseHistory = (history) => {
         return (
             <div className="card mb-5">
-                <h3 className="card-header">Purchase History</h3>
+                <h3 className="card-header">Purchase history</h3>
                 <ul className="list-group">
-                    <li className="list-group-item">History</li>
+                    <li className="list-group-item">
+                        {history.length > 0 && history.map((h, i) => {
+                            return (
+                                <div key = {i}>
+                                    <hr/> {h
+                                        .products
+                                        .map((p, i) => {
+                                            return (
+                                                <div key={i}>
+                                                    <h6>Product name: {p.name}</h6>
+                                                    <h6>Product price: ${p.price}</h6>
+                                                    <h6>
+                                                        Purchased date:{" "} {moment(h.createdAt).fromNow()}
+                                                    </h6>
+                                                </div>
+                                            );
+                                        })}
+                                </div>
+                            );
+                        })}
+                    </li>
                 </ul>
             </div>
         );
     };
 
     return (
-        <Layout title="Dashboard" description={`Hello, ${name}!`} className="container-fluid">
+        <Layout
+            title="Dashboard"
+            description={`Hello, ${name}!`}
+            className="container-fluid">
             <div className="row">
                 <div className="col-3">
                     {userLinks()}
                 </div>
                 <div className="col-9">
                     {userInfo()}
-                    {purchaseHistory()}
+                    {purchaseHistory(history)}
                 </div>
             </div>
         </Layout>

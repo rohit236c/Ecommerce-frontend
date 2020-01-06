@@ -41,5 +41,20 @@ export const updateUser = (user, next) => {
             localStorage.setItem('jwt', JSON.stringify(auth));
             next();
         }
-    }
-}
+    };
+};
+
+export const getPurchaseHistory = (userId, token) => {
+    return fetch(`${API}/orders/by/users/${userId}`, {
+        method: "GET",
+        headers: {
+            Accept: 'application/json',
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        }
+    }).then(response => {
+        return response.json();
+    }).catch(err => {
+        return reject({err});
+    });
+};
