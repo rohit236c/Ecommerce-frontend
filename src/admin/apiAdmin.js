@@ -80,3 +80,56 @@ export const updateOrderStatus = (userId, token, orderId, status) => {
         return err;
     });
 };
+/**
+ * To Perform
+ * Crud on Products
+ *
+ * get all products
+ * get a single product
+ * update a single product
+ * delete a single product
+ */
+
+export const getProducts = () => {
+    return fetch(`${API}/products?limit=100`, {method: "GET"}).then(response => {
+        return response.json();
+    }).catch(err => {
+        return err;
+    });
+};
+
+export const getOneProduct = (productId) => {
+    return fetch(`${API}/product/${productId}`, {method: "GET"}).then(response => {
+        return response.json();
+    }).catch(err => {
+        return err;
+    });
+};
+export const deleteProduct = (userId, productId, token) => {
+    return fetch(`${API}/product/${productId}/${userId}`, {
+        method: "DELETE",
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    }).then(response => {
+        return response.json();
+    }).catch(err => {
+        return err;
+    });
+};
+
+export const updateProduct = (userId, productId, token, product) => {
+    return fetch(`${API}/product/${productId}/${userId}`, {
+        method: "PUT",
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: product
+    }).then(response => {
+        return response.json();
+    }).catch(err => {
+        return err;
+    });
+};

@@ -23,7 +23,6 @@ const Product = (props) => {
                     if (data.error) {
                         setError(data.error);
                     } else {
-                        console.log(data);
                         setRelatedProducts(data);
                     }
                 }).catch(err => setError(err));
