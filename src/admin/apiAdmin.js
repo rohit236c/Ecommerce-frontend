@@ -91,7 +91,7 @@ export const updateOrderStatus = (userId, token, orderId, status) => {
  */
 
 export const getProducts = () => {
-    return fetch(`${API}/products?limit=100`, {method: "GET"}).then(response => {
+    return fetch(`${API}/products?limit=undefined`, {method: "GET"}).then(response => {
         return response.json();
     }).catch(err => {
         return err;

@@ -44,8 +44,8 @@ const UpdateProducts = () => {
                     {products.map((p, i) => (
                         <li
                             key={i}
-                            className="list-group d-flex justify-content-between align-items-center">
-                            <strong>{p.name}</strong>
+                            className="list-group-item d-flex justify-content-between align-items-center">
+                            <strong className="col-8">{p.name}</strong>
                             <Link to={`/admin/product/update/${p._id}`}>
                                 <span className="badge badge-warning badge-pill">update</span>
                             </Link>
