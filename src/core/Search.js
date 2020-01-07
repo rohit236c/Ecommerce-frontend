@@ -65,7 +65,7 @@ const Search = () => {
                     <div className="input-group-prepend">
                         <select className=" btn mr-2" onChange={handleChange('category')}>
                             <option value="All">Pick Category</option>
-                            {categories.map((c, i) => (
+                            {categories && categories.map((c, i) => (
                                 <option key={i} value={c._id}>{c.name}</option>
                             ))}
                         </select>
