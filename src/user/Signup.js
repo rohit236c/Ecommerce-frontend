@@ -13,7 +13,7 @@ const Signup = () => {
         password: '',
         error: '',
         success: false,
-        role: 'Buyer'
+        role: '0'
     });
     const [roles,
         setRoles] = useState([]);
