@@ -1,13 +1,22 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Layout from '../core/Layout'
 import {signup} from '../auth/index';
 import {Link} from 'react-router-dom';
+import {getRoles} from './apiUser';
 
 const Signup = () => {
 
     const [values,
-        setValues] = useState({name: '', email: '', password: '', error: '', success: false});
-
+        setValues] = useState({
+        name: '',
+        email: '',
+        password: '',
+        error: '',
+        success: false,
+        role: 'Buyer'
+    });
+    const [roles,
+        setRoles] = useState([]);
     const handleChange = key => event => {
         setValues({
             ...values,
@@ -15,8 +24,28 @@ const Signup = () => {
             [key]: event.target.value
         })
     }
-
-    const {name, email, password, success, error} = values;
+    const loadRoles = () => {
+        getRoles().then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            } else {
+                setRoles(data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    };
+    useEffect(() => {
+        loadRoles();
+    }, []);
+    const {
+        name,
+        email,
+        password,
+        success,
+        error,
+        role
+    } = values;
 
     const signUpForm = () => (
         <form>
@@ -44,6 +73,15 @@ const Signup = () => {
                     value={password}
                     type="password"/>
             </div>
+            <div className="form-group">
+                <label className="text-muted">Roles</label>
+                <select onChange={handleChange('role')} className="form-control">
+                    <option>Select any one role</option>
+                    {roles && roles.map((r, i) => (
+                        <option key={i} value={r.role_id}>{r.name}</option>
+                    ))}
+                </select>
+            </div>
             <button onClick={clickSubmit} className="btn btn-primary">Submit</button>
         </form>
     )
@@ -54,7 +92,7 @@ const Signup = () => {
             ...values,
             error: false
         })
-        signup({name, email, password}).then(data => {
+        signup({name, email, password, role}).then(data => {
             if (data.error) {
                 setValues({
                     ...values,
@@ -93,7 +131,8 @@ const Signup = () => {
                 ? ''
                 : 'none'
         }}>
-            New Account is created. Please <Link to="/signin">Sign in</Link>
+            New Account is created. Please
+            <Link to="/signin">Sign in</Link>
         </div>
     )
 

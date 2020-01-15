@@ -58,3 +58,10 @@ export const getPurchaseHistory = (userId, token) => {
         return reject({err});
     });
 };
+export const getRoles = () => {
+    return fetch(`${API}/roles`, {method: "GET"}).then(response => {
+        return response.json();
+    }).catch(err => {
+        return reject({err});
+    });
+};
