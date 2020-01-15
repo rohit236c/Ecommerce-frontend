@@ -5,7 +5,6 @@ import {isAuthenticated} from '../auth/index';
 import {createProduct, getCategories} from '../admin/apiAdmin';
 
 const AddProduct = () => {
-
     const [values,
         setValues] = useState({
         name: '',
@@ -20,7 +19,8 @@ const AddProduct = () => {
         error: '',
         createdProduct: '',
         redirectToProfile: false,
-        formData: ''
+        formData: '',
+        createdBy: ''
     });
 
     const {
@@ -35,7 +35,8 @@ const AddProduct = () => {
         error,
         createdProduct,
         redirectToProfile,
-        formData
+        formData,
+        createdBy
     } = values;
     const init = () => {
         getCategories().then(data => {
@@ -56,7 +57,7 @@ const AddProduct = () => {
     useEffect(() => {
         // setValues({     ...values,     formData: new FormData() });
         init();
-    },[]);
+    }, []);
     const handleChange = name => (e) => {
         const value = name === 'photo'
             ? e.target.files[0]
@@ -77,6 +78,7 @@ const AddProduct = () => {
             error: '',
             loading: true
         });
+        formData.set('createdBy', isAuthenticated().user._id);
         createProduct(user._id, token, formData).then(data => {
             if (data.err) {
                 setValues({
@@ -92,8 +94,8 @@ const AddProduct = () => {
                     description: '',
                     quantity: '',
                     price: '',
-                    category:'',
-                    shipping:'',
+                    category: '',
+                    shipping: '',
                     error: false,
                     createdProduct: data.product.name,
                     loading: false
