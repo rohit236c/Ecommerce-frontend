@@ -90,8 +90,14 @@ export const updateOrderStatus = (userId, token, orderId, status) => {
  * delete a single product
  */
 
-export const getProducts = () => {
-    return fetch(`${API}/products?limit=undefined`, {method: "GET"}).then(response => {
+export const getProducts = (userId, token) => {
+    return fetch(`${API}/products/${userId}`, {
+        method: "GET",
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+        }
+    }).then(response => {
         return response.json();
     }).catch(err => {
         return err;

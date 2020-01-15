@@ -37,12 +37,21 @@ const Menu = (props) => {
                     </li>
                 )}
                 {isAuthenticated() && isAuthenticated().user.role === 1 && (
-                    <li className="nav-item">
-                        <Link
-                            className="nav-link"
-                            style={isActive(history, '/admin/dashboard')}
-                            to="/admin/dashboard">Dashboard</Link>
-                    </li>
+                    <React.Fragment>
+                        <li className="nav-item">
+                            <Link
+                                className="nav-link"
+                                style={isActive(history, '/admin/dashboard')}
+                                to="/admin/dashboard">Dashboard</Link>
+
+                        </li>
+                        <li className="nav-item">
+                            <Link
+                                className="nav-link"
+                                style={isActive(history, '/user/dashboard')}
+                                to="/user/dashboard">Profile Dashboard</Link>
+                        </li>
+                    </React.Fragment>
                 )}
                 {!isAuthenticated() && (
                     <React.Fragment>

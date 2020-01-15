@@ -11,7 +11,7 @@ const UpdateProducts = () => {
         setProducts] = useState([]);
     //-------------------------//
     const load = () => {
-        getProducts().then((data) => {
+        getProducts(user._id, token).then((data) => {
             if (data.error) {
                 console.log(data.error);
             } else {
